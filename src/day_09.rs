@@ -63,6 +63,7 @@ fn split_block(xs: &[usize]) -> (FastMap, Vec<(usize, usize)>) {
         .map(|(_, v)| *v)
         .collect();
     gaps.sort_unstable();
+    gaps.reverse();
 
     m = m
         .iter()
@@ -88,7 +89,7 @@ fn find_next_free_idx(
     file_idx: usize,
     file_len: usize,
 ) -> Option<usize> {
-    for (i, (gap_idx, gap_len)) in gaps.iter_mut().enumerate() {
+    for (i, (gap_idx, gap_len)) in gaps.iter_mut().enumerate().rev() {
         if *gap_idx >= file_idx {
             return None;
         }
