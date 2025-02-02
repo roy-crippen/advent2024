@@ -1,9 +1,12 @@
 use crate::common::Solution;
+use nohash_hasher::NoHashHasher;
 use std::collections::HashMap;
+use std::hash::BuildHasherDefault;
 use std::time::Instant;
 
-static INPUT: &str = include_str!("../data/day_09.txt");
+type FastMap = HashMap<usize, (usize, usize), BuildHasherDefault<NoHashHasher<usize>>>;
 
+static INPUT: &str = include_str!("../data/day_09.txt");
 pub fn solve_day_09() -> Solution {
     let start = Instant::now();
     let xs = make_block(INPUT);
@@ -37,9 +40,8 @@ fn make_block(s: &str) -> Vec<usize> {
     xs
 }
 
-fn split_block(xs: &[usize]) -> (HashMap<usize, (usize, usize)>, Vec<(usize, usize)>) {
-    // let start = Instant::now();
-    let mut m: HashMap<usize, (usize, usize)> = HashMap::new();
+fn split_block(xs: &[usize]) -> (FastMap, Vec<(usize, usize)>) {
+    let mut m: FastMap = HashMap::with_capacity_and_hasher(25_000, BuildHasherDefault::default());
     let mut it = xs.iter().enumerate().peekable();
     let mut file_len = 0;
     while let Some((idx, x)) = it.next() {
@@ -60,7 +62,7 @@ fn split_block(xs: &[usize]) -> (HashMap<usize, (usize, usize)>, Vec<(usize, usi
         .filter(|(k, _)| **k > 1_000_000)
         .map(|(_, v)| *v)
         .collect();
-    gaps.sort();
+    gaps.sort_unstable();
 
     m = m
         .iter()
@@ -68,7 +70,6 @@ fn split_block(xs: &[usize]) -> (HashMap<usize, (usize, usize)>, Vec<(usize, usi
         .map(|(k, v)| (*k, *v))
         .collect();
 
-    // println!("split_block duration = {:?}", start.elapsed());
     (m, gaps)
 }
 
@@ -132,15 +133,16 @@ fn day_09_a(_xs: &[usize]) -> String {
 
 fn day_09_b(_xs: &[usize]) -> String {
     let (file_m, mut gaps) = split_block(_xs);
-    let mut xs = _xs.to_vec();
+    let xs: &mut [usize] = &mut _xs.to_vec()[..];
+
     let mut keys: Vec<usize> = file_m.keys().copied().collect();
-    keys.sort();
+    keys.sort_unstable();
 
     for file_id in keys.iter().rev() {
         let (file_idx, file_len) = *file_m.get(file_id).unwrap();
         if let Some(gap_idx) = find_next_free_idx(&mut gaps, file_idx, file_len) {
             for n in 0..file_len {
-                xs.swap(file_idx + n, gap_idx + n);
+                unsafe { xs.swap_unchecked(file_idx + n, gap_idx + n) }
             }
             // println!("{:?}", &xs);
         }
