@@ -16,35 +16,36 @@ pub fn solve_day_01() -> Solution {
     }
 }
 
-fn day_01_a(_ls: &[usize], _rs: &[usize]) -> String {
+fn day_01_a(_ls: &[i32], _rs: &[i32]) -> String {
     let mut ls = _ls.to_vec();
-    ls.sort();
+    ls.sort_unstable();
     let mut rs = _rs.to_vec();
-    rs.sort();
+    rs.sort_unstable();
     let v = ls
         .iter()
         .zip(rs)
-        .map(|(l, r)| if *l > r { *l - r } else { r - *l })
-        .sum::<usize>();
+        // .map(|(&l, r)| if l > r { l - r } else { r - l })
+        .map(|(&l, r)| (l - r).abs())
+        .sum::<i32>();
     format!("day_01_a = {}", v)
 }
 
-fn day_01_b(ls: &[usize], rs: &[usize]) -> String {
+fn day_01_b(ls: &[i32], rs: &[i32]) -> String {
     let mut score = 0;
-    for l in ls {
-        score += rs.iter().filter(|r| **r == *l).sum::<usize>();
+    for &l in ls {
+        score += rs.iter().filter(|&&r| r == l).sum::<i32>();
     }
     format!("day_01_b = {}", score)
 }
 
-fn parse_input(input: &str) -> (Vec<usize>, Vec<usize>) {
+fn parse_input(input: &str) -> (Vec<i32>, Vec<i32>) {
     input
         .split("\n")
         .filter(|s| !s.is_empty())
         .map(|s| {
             let mut ss = s.split(" ").filter(|s| !s.is_empty());
-            let x = ss.next().unwrap().parse::<usize>().unwrap();
-            let y = ss.next().unwrap().parse::<usize>().unwrap();
+            let x = ss.next().unwrap().parse::<i32>().unwrap();
+            let y = ss.next().unwrap().parse::<i32>().unwrap();
             (x, y)
         })
         .unzip()

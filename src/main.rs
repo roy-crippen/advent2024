@@ -9,6 +9,8 @@ use lib::day_08::solve_day_08;
 use lib::day_09::solve_day_09;
 use lib::day_10::solve_day_10;
 
+use lib::common::Solution;
+// use rayon::prelude::*;
 use std::time::Instant;
 
 fn main() {
@@ -27,12 +29,16 @@ fn main() {
     ];
 
     println!();
-    ds.iter().for_each(|f| {
-        let solution = f();
+    // let mut solutions: Vec<Solution> = Vec::new();
+    // ds.par_iter().map(|f| f()).collect_into_vec(&mut solutions);
+
+    let solutions: Vec<Solution> = ds.iter().map(|f| f()).collect();
+
+    for solution in solutions {
         println!(
             "{:<30}, {:<30}, {:?}",
             solution.part_a, solution.part_b, solution.duration
         );
-    });
+    }
     println!("\ntotal elapsed time: {:?}", start.elapsed());
 }
