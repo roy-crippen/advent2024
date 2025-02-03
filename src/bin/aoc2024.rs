@@ -53,7 +53,6 @@ fn main() {
     let start = Instant::now();
     let mut solutions: Vec<Solution> = Vec::new();
     if let Some(day) = args.day {
-        println!("Running day: {}", day);
         if let Some(f) = days_m.get(&day) {
             let solution = f();
             println!(

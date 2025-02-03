@@ -267,7 +267,7 @@ fn parse(s: &str) -> Grid {
 
     // finish padding the grid
     let cols = xss[0].len();
-    let ts: Vec<char> = std::iter::repeat('_').take(cols).collect();
+    let ts: Vec<char> = std::iter::repeat_n('_', cols).collect();
     xss.insert(0, ts.clone());
     xss.push(ts);
 

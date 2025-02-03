@@ -1,3 +1,5 @@
+use std::fmt::Debug;
+use std::iter::Iterator;
 use std::time::Duration;
 
 pub struct Solution {
@@ -68,4 +70,44 @@ pub fn pad_grid<T: Clone + Copy>(css: &mut Vec<Vec<T>>, ch: &T) {
     let row: Vec<T> = vec![*ch; css[0].len()];
     css.insert(0, row.clone());
     css.push(row);
+}
+
+/// Returns k nested 'loops' from xs, ordered.
+///
+/// `k_nested_recur`(3, &[1,2]) sudo code same as:
+///
+///  for (i,vi) 0..2 { for (j,vj) in i..2 { for (k,vk) in j..2 { list.push(vi, vj, vk) } } }
+///
+/// Recursive solution.
+///
+/// ```
+/// use lib::common::k_nested_recur;
+///
+/// let res = [[1,1,1], [1,1,2], [1,2,1], [1,2,2], [2,1,1], [2,1,2], [2,2,1], [2,2,2]];
+/// assert_eq!(k_nested_recur(3, &[1,2]), res);
+///
+/// let xss = k_nested_recur(8, &["red", "green", "blue", "orange"]);
+/// assert_eq!(xss.len(), 65536);
+///
+/// ```
+pub fn k_nested_recur<T>(k: usize, xs: &[T]) -> Vec<Vec<T>>
+where
+    T: Clone + PartialEq + Ord + Debug,
+{
+    match k {
+        0 => vec![vec![]],
+        1 => xs.iter().map(|x| vec![x.clone()]).collect(),
+        _ => {
+            let mut list: Vec<Vec<T>> = Vec::new();
+            for x in xs {
+                let ts = k_nested_recur(k - 1, xs);
+                for mut t in ts {
+                    t.push(x.clone());
+                    list.push(t);
+                }
+            }
+            list.sort();
+            list
+        }
+    }
 }

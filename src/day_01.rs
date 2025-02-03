@@ -21,12 +21,7 @@ fn day_01_a(_ls: &[i32], _rs: &[i32]) -> String {
     ls.sort_unstable();
     let mut rs = _rs.to_vec();
     rs.sort_unstable();
-    let v = ls
-        .iter()
-        .zip(rs)
-        // .map(|(&l, r)| if l > r { l - r } else { r - l })
-        .map(|(&l, r)| (l - r).abs())
-        .sum::<i32>();
+    let v = ls.iter().zip(rs).map(|(&l, r)| (l - r).abs()).sum::<i32>();
     format!("day_01_a = {}", v)
 }
 
