@@ -1,3 +1,10 @@
+use std::collections::HashMap;
+use std::time::Instant;
+
+use clap::Parser;
+use rayon::prelude::*;
+
+use lib::common::Solution;
 use lib::day_01::solve_day_01;
 use lib::day_02::solve_day_02;
 use lib::day_03::solve_day_03;
@@ -8,12 +15,7 @@ use lib::day_07::solve_day_07;
 use lib::day_08::solve_day_08;
 use lib::day_09::solve_day_09;
 use lib::day_10::solve_day_10;
-use std::collections::HashMap;
-
-use clap::Parser;
-use lib::common::Solution;
-use rayon::prelude::*;
-use std::time::Instant;
+use lib::day_11::solve_day_11;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -42,6 +44,7 @@ fn main() {
         solve_day_08,
         solve_day_09,
         solve_day_10,
+        solve_day_11,
     ];
 
     let days_m: HashMap<u8, fn() -> Solution> = fs
