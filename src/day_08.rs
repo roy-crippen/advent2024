@@ -199,15 +199,15 @@ mod tests {
 
     #[test]
     fn b_test() {
-        // let grid = parse(STR3);
-        // let result = day_08_b(&grid);
-        // println!("{}", &result);
-        // assert_eq!("day_08_b = 9".to_string(), result);
+        let grid = parse(STR3);
+        let result = day_08_b(&grid);
+        println!("{}", &result);
+        assert_eq!("day_08_b = 9".to_string(), result);
 
-        // let grid = parse(STR2);
-        // let result = day_08_b(&grid);
-        // println!("{}", &result);
-        // assert_eq!("day_08_b = 34".to_string(), result);
+        let grid = parse(STR2);
+        let result = day_08_b(&grid);
+        println!("{}", &result);
+        assert_eq!("day_08_b = 34".to_string(), result);
 
         let grid = parse(INPUT);
         let result = day_08_b(&grid);
